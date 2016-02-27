@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>test</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <script type="text/javascript" src="http://pc1.gtimg.com/tdf/js/jquery.min.js"></script>
+        <script type="text/javascript" src="./js/style.js"></script>
+        <script type="text/javascript" src="http://pc1.gtimg.com/tdf/js/plug/idangerous.swiper.min.js"></script>
+		<script type="text/javascript" src="http://tdf.qq.com/js/lib/ping.js"></script>
+        <link type="text/css" rel="stylesheet" href="http://pc1.gtimg.com/tdf/js/plug/idangerous.swiper.css" />
+        <link type="text/css" href="./css/style.css" rel="stylesheet" />
+        <style type="text/css">
+            body {
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide slide1">
+                    <div class="slide-content">
+                        <div class="logo"></div>
+                        <div class="tag animation"></div>
+                        <div class="font animation"></div>
+                        <div class="arrow"></div>
+                    </div>
+                </div>
+                <div class="swiper-slide slide2">
+                    <div class="slide-content">
+                        <div class="logo"></div>
+						<div class="tag animation"></div>
+						<div class="font animation"></div>
+                        <div class="arrow"></div>
+                    </div>
+                </div>
+				
+				<div class="swiper-slide slide3">
+                    <div class="slide-content">
+                        <div class="logo"></div>
+						<div class="tag animation"></div>
+						<div class="font animation"></div>
+                        <div class="arrow"></div>
+                    </div>
+                </div>
+				
+				<div class="swiper-slide slide4">
+                    <div class="slide-content">
+                        <div class="logo"></div>
+						<div class="tag animation"></div>
+						<div class="font animation"></div>
+                        <div class="arrow"></div>
+                    </div>
+                </div>
+				
+				<div class="swiper-slide slide5">
+                    <div class="slide-content">
+                        <div class="logo gray"></div>
+                		<div class="number-1"></div>
+						<div class="number-2"></div>
+						<div class="days"></div>
+						<div class="number-3"></div>
+						<div class="number-4"></div>
+						<div class="dot dot1"></div>
+						<div class="number-5"></div>
+						<div class="number-6"></div>
+						<div class="dot dot2"></div>
+						<div class="number-7"></div>
+						<div class="number-8"></div>
+						<div class="button animation">
+							<a href="javascript:void(0)" id="part5-button"></a>
+						</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+			if(typeof(pgvMain) == 'function') pgvMain({ repeatApplay: "true",virtualDomain:"tdf.qq.com"});
+			function setSlideAnimation(index){
+				if ( index == 1) {
+					$('.slide2 .slide-content .tag').addClass('slide2TagAnimation');
+					$('.slide2 .slide-content .font').addClass('slide2FontAnimation');
+				} else if (index == 2 ) {
+					$('.slide3 .slide-content .tag').addClass('slide3TagAnimation');
+					$('.slide3 .slide-content .font').addClass('slide3FontAnimation');
+				} else if (index == 3 ) {
+					$('.slide4 .slide-content .tag').addClass('slide4TagAnimation');
+					$('.slide4 .slide-content .font').addClass('slide4FontAnimation');
+				} else if (index == 4 ) {
+					$('.slide5 .button').addClass('slide5ButtonAnimation');
+												   
+				}
+			}
+		
+            $(function(){
+				var ParamterSlideActiveIndex = $.getQuery("slide_active") || 0; 
+				setSlideAnimation(ParamterSlideActiveIndex);
+				
+				if (ParamterSlideActiveIndex != 0) {
+					window.slideActiveIndex = ParamterSlideActiveIndex;
+				}
+				
+                suSwiper = new Swiper('.swiper-container', {
+                    mode: 'vertical',
+                    initialSlide: ParamterSlideActiveIndex,
+                    onSlideChangeEnd: function(swiper, direction){
+						window.slideActiveIndex = swiper.activeIndex;
+						setSlideAnimation(swiper.activeIndex);
+                    },
+					onSlideChangeStart: function(swiper, direction){
+						window.slideActiveIndex = swiper.activeIndex;
+					}
+                });
+				
+				setInterval(countdown, 1000);
+				if( !window.isWechatClient() ) {
+					$(".slide5 .button").hide();
+				}
+				$('#part5-button').on('click', function(){
+					pgvSendClick({hottag:"warm.mobile.part5-button"});
+					location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxbd53606092da0cb6&redirect_uri=http%3A%2F%2Ftdf.qq.com%2Fphp%2Fyure.php&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
+				});
+				
+				if (document.addEventListener) {
+			        document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+			    } else if (document.attachEvent) {
+					document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+					document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+			    }
+            });
+			
+			function onBridgeReady() {
+				var name = $.getQuery("name");
+				var dataForWeixin = {
+					appId: "",
+					MsgImg: "http://tdf.qq.com/mobile/images/icon.png",
+					TLImg: "http://tdf.qq.com/mobile/images/icon.png",
+					url: "http://tdf.qq.com/mobile/",
+					title: "腾讯神秘医疗产品“全球首发”",
+					desc: "",
+					fakeid: "",
+					callback: function(res){
+					}
+				};
+				$(".btn").show();
+				
+				//右上角菜单
+				WeixinJSBridge.call('showOptionMenu');
+				
+				//发送给朋友
+				WeixinJSBridge.on('menu:share:appmessage', function(argv){
+					WeixinJSBridge.invoke('sendAppMessage', {
+						"appid": dataForWeixin.appId,
+						"img_url": dataForWeixin.MsgImg,
+						"img_width": "16",
+						"img_height": "16",
+						"link": dataForWeixin.url,
+						"desc": "2015，邀请您与我们一起关爱1.14亿糖尿病病人，传递关爱",
+						"title": "腾讯神秘医疗产品“全球首发” 邀请函"
+					}, function(res){
+						//alert("share ok");
+						//_report('send_msg', res.err_msg);
+						//dataForWeixin.callback(res);
+					});
+				});
+				
+				//发送到朋友圈
+				WeixinJSBridge.on('menu:share:timeline', function(argv){
+					WeixinJSBridge.invoke('shareTimeline', {
+						"appid": dataForWeixin.appId,
+						"img_url": dataForWeixin.TLImg,
+						"img_width": "16",
+						"img_height": "16",
+						"link": dataForWeixin.url,
+						"desc": "",
+						"title": "等风来，我收到了腾讯神秘医疗产品“全球首发”邀请函"
+					}, function(res){
+						(dataForWeixin.callback)();
+					});
+				});
+			}
+        </script>
+    </body>
+</html>
